@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "0:0"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  scylla:
+    image: scylladb/scylla:5.4
+    command: []
+    ports:
+      - "0:0"
+    volumes:
+      - scylladata:/var/lib/scylla
+
+volumes:
+  pgdata: {}
+  scylladata: {}
