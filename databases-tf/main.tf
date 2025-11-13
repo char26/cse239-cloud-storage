@@ -55,7 +55,7 @@ resource "google_compute_instance" "scylla_vm" {
 
   metadata_startup_script = <<EOF
     #!/bin/bash
-    docker run --name scylla --hostname scylla -d scylladb/scylla
+    docker run --name scylla --hostname scylla -p 9042:9042 -d scylladb/scylla
   EOF
 
   tags = ["scylla-vm"]
