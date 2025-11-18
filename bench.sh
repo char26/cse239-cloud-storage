@@ -73,10 +73,29 @@ run_scylla_trial() {
 
 # --- Main Logic ---
 
-# Get IP addresses from terraform output
-echo "Getting IP addresses from Terraform..."
-POSTGRES_IP=$(terraform -chdir=databases-tf output -raw postgres_public_ip)
-SCYLLA_IP=$(terraform -chdir=databases-tf output -raw scylla_public_ip)
+# Get IP addresses based on the environment
+if [ "$ENV" = "gcs" ]; then
+    echo "GCS environment detected. Getting IP addresses from Terraform..."
+    # Use existing variables if they are set, otherwise get from terraform
+    if [ -z "$POSTG" ]; then
+        POSTGRES_IP=$(terraform -chdir=databases-tf output -raw postgres_public_ip)
+    fi
+    if [ -z "$SCYLLA_IP" ]; then
+        SCYLLA_IP=$(terraform -chdir=databases-tf output -raw scylla_public_ip)
+    fi
+elif [ "$ENV" = "nautilus" ]; then
+    echo "Nautilus environment detected. Using environment variables for IP addresses..."
+    if [ -z "$POSTGRES_IP" ] || [ -z "$SCYLLA_IP" ]; then
+        echo "Error: POSTGRES_IP and SCYLLA_IP must be set in the Nautilus environment."
+        exit 1
+    fi
+else
+    echo "No ENV specified. Using environment variables for IP addresses..."
+    if [ -z "$POSTGRES_IP" ] || [ -z "$SCYLLA_IP" ]; then
+        echo "Error: POSTGRES_IP and SCYLLA_IP must be set for the local environment."
+        exit 1
+    fi
+fi
 
 echo "Postgres IP: $POSTGRES_IP"
 echo "Scylla IP: $SCYLLA_IP"
