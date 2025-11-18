@@ -6,14 +6,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: database
     ports:
-      - "0:0"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
   scylla:
     image: scylladb/scylla:5.4
     command: []
     ports:
-      - "0:0"
+      - "5432:5432"
     volumes:
       - scylladata:/var/lib/scylla
 
