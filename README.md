@@ -62,3 +62,8 @@ Destroy the infrastructure
 ```sh
 terraform destroy
 ```
+
+## Next Steps:
+We'll need to download the latest YCSB release, extracting it into a directory named ycsb (the benchmark will look for this directory).
+
+After that, we should be able to deploy the VM instances created by Terraform, and run the benchmarks.
