@@ -31,7 +31,16 @@ resource "google_compute_instance" "postgres_vm" {
 
   metadata_startup_script = <<EOF
     #!/bin/bash
-    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5432:5432 postgres:18
+    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5432:5432 postgres:9.6
+
+    until docker exec postgres pg_isready -U postgres; do
+      echo "Postgres not ready, retrying in 1s..."
+      sleep 1
+    done
+
+    docker exec -u postgres postgres psql -U postgres -c "CREATE DATABASE test;"
+    docker exec -u postgres postgres psql -U postgres -d test -c "CREATE TABLE usertable (YCSB_KEY VARCHAR(255) PRIMARY KEY not NULL, YCSB_VALUE JSONB not NULL);"
+    docker exec -u postgres postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test to postgres;"
   EOF
 
   tags = ["postgres-vm"]
@@ -56,6 +65,23 @@ resource "google_compute_instance" "scylla_vm" {
   metadata_startup_script = <<EOF
     #!/bin/bash
     docker run --name scylla --hostname scylla -p 9042:9042 -d scylladb/scylla
+
+    until docker exec scylla cqlsh -e "CREATE KEYSPACE IF NOT EXISTS ycsb WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 3};" |& grep -vq "Connection error"; do
+      sleep 1
+    done
+
+    docker exec scylla cqlsh -e "CREATE TABLE ycsb.usertable (
+      y_id varchar primary key,
+      field0 varchar,
+      field1 varchar,
+      field2 varchar,
+      field3 varchar,
+      field4 varchar,
+      field5 varchar,
+      field6 varchar,
+      field7 varchar,
+      field8 varchar,
+      field9 varchar);"
   EOF
 
   tags = ["scylla-vm"]
