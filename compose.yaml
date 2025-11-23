@@ -9,6 +9,7 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./ycsb/init_postgres.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - default
 

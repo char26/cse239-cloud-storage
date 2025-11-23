@@ -31,7 +31,7 @@ resource "google_compute_instance" "postgres_vm" {
 
   metadata_startup_script = <<EOF
     #!/bin/bash
-    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5432:5432 postgres:9.6
+    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5433:5432 postgres:9.6
 
     until docker exec postgres pg_isready -U postgres; do
       echo "Postgres not ready, retrying in 1s..."
@@ -93,7 +93,7 @@ resource "google_compute_firewall" "postgres_firewall" {
   network = "default"
   allow {
     protocol = "tcp"
-    ports    = ["5432"]
+    ports    = ["5433"]
   }
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["postgres-vm"]
