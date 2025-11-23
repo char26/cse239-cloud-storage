@@ -17,5 +17,5 @@ COPY . .
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-ENTRYPOINT ["/bin/bash", "./run_ycsb_postgres.sh"]
-CMD ["workloada"]
+ENTRYPOINT ["/bin/bash", "./run_ycsb.sh"]
+CMD ["postgres", "workloada"]

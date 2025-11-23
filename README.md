@@ -1,5 +1,7 @@
 # cse239-cloud-storage
 
+Note: If you are another group looking to deploy our project head to the [Nautilus instructions below](#nautilus).
+
 ## Installation Prerequisites
 
 ### Install Terraform
@@ -75,10 +77,11 @@ After that, we should be able to deploy the VM instances created by Terraform, a
 docker compose up
 ```
 
-Run YCSB workloadb against the local postgres database
+Run YCSB workloadb against the local postgres and scylla databases
 
 ```sh
 cd ycsb
 docker build . -t ycsb
-docker run -it --network cse239-cloud-storage_default ycsb workloadb
+docker run -it --network cse239-cloud-storage_default ycsb postgres workloadb
+docker run -it --network cse239-cloud-storage_default ycsb scylla workloadb
 ```
