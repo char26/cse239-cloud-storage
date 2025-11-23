@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -f .env ]; then
+    # shellcheck source=.env
+    source .env
+fi
+
 # Config stuff
 WORKLOAD="workloads/workloada" # Example YCSB workload file
 NUM_TRIALS=3
@@ -19,21 +24,41 @@ mkdir -p "$OUTDIR"
 wait_for_port() {
     local host="$1"
     local port="$2"
+    local max_retries=5
+    local backoff=10
     echo "Waiting for $host:$port to be open..."
-    while ! nc -z "$host" "$port"; do
-        sleep 1
+    for ((i=1; i<=max_retries; i++)); do
+        if nc -z "$host" "$port"; then
+            echo "$host:$port is open."
+            return 0
+        fi
+        echo "Attempt $i/$max_retries failed. Retrying in $backoff seconds..."
+        sleep "$backoff"
+        backoff=$((backoff * 2))
     done
-    echo "$host:$port is open."
+    echo "Error: Could not connect to $host:$port after $max_retries attempts."
+    exit 1
 }
 
 # A basic postgres trial
 run_postgres_trial() {
     local trial="$1"
-    local ip="$2"
+    local full_address="$2"
+    local ip
+    local port
 
-    wait_for_port "$ip" 5432
+    # Check if a port is specified in the address
+    if [[ "$full_address" == *":"* ]]; then
+        ip=$(echo "$full_address" | cut -d: -f1)
+        port=$(echo "$full_address" | cut -d: -f2)
+    else
+        ip="$full_address"
+        port=5432
+    fi
 
-    local DSN="postgresql://${PG_USER}:${PG_PASSWORD}@${ip}:5432/${PG_DB}"
+    wait_for_port "$ip" "$port"
+
+    local DSN="${ip}"
 
     # Make the log file for the trial
     local TSTAMP
