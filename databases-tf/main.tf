@@ -15,7 +15,7 @@ provider "google" {
 
 resource "google_compute_instance" "postgres_vm" {
   name         = "postgres-vm"
-  machine_type = "n1-standard-1"
+  machine_type = "n2d-standard-2"
   zone         = "us-central1-a"
 
   boot_disk {
@@ -33,14 +33,13 @@ resource "google_compute_instance" "postgres_vm" {
     #!/bin/bash
     docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5433:5432 postgres:9.6
 
-    until docker exec postgres pg_isready -U postgres; do
+    until docker exec -u postgres postgres psql -h localhost -U postgres -c "CREATE DATABASE test;"; do
       echo "Postgres not ready, retrying in 1s..."
       sleep 1
     done
 
-    docker exec -u postgres postgres psql -U postgres -c "CREATE DATABASE test;"
-    docker exec -u postgres postgres psql -U postgres -d test -c "CREATE TABLE usertable (YCSB_KEY VARCHAR(255) PRIMARY KEY not NULL, YCSB_VALUE JSONB not NULL);"
-    docker exec -u postgres postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test to postgres;"
+    docker exec -u postgres postgres psql -h localhost -U postgres -d test -c "CREATE TABLE usertable (YCSB_KEY VARCHAR(255) PRIMARY KEY not NULL, YCSB_VALUE JSONB not NULL);"
+    docker exec -u postgres postgres psql -h localhost -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test to postgres;"
   EOF
 
   tags = ["postgres-vm"]
@@ -48,7 +47,7 @@ resource "google_compute_instance" "postgres_vm" {
 
 resource "google_compute_instance" "scylla_vm" {
   name         = "scylla-vm"
-  machine_type = "n1-standard-1"
+  machine_type = "n2d-standard-2"
   zone         = "us-central1-a"
 
   boot_disk {
