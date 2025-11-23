@@ -64,6 +64,21 @@ terraform destroy
 ```
 
 ## Next Steps:
+
 We'll need to download the latest YCSB release, extracting it into a directory named ycsb (the benchmark will look for this directory).
 
 After that, we should be able to deploy the VM instances created by Terraform, and run the benchmarks.
+
+## Nautilus
+
+```sh
+docker compose up
+```
+
+Run YCSB workloadb against the local postgres database
+
+```sh
+cd ycsb
+docker build . -t ycsb
+docker run -it --network cse239-cloud-storage_default ycsb workloadb
+```

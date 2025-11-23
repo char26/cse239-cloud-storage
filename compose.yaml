@@ -1,14 +1,17 @@
 services:
   postgres:
-    image: postgres:18
+    image: postgres:9.6
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: database
+      POSTGRES_DB: test
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - default
+
   scylla:
     image: scylladb/scylla
     command: []
@@ -16,15 +19,13 @@ services:
       - "9042:9042"
     volumes:
       - scylladata:/var/lib/scylla
-  benchmark:
-    build:
-      context: .
-      dockerfile: benchmark.Dockerfile.v2
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: tail -f /dev/null
+    networks:
+      - default
 
 volumes:
   pgdata: {}
   scylladata: {}
+
+networks:
+  default:
+    driver: bridge
