@@ -2,8 +2,7 @@ FROM debian:bookworm
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y gpg wget curl && \
-    apt-get install -y python3.11 python3-pip
+RUN apt-get update && apt-get install -y gpg wget curl python3.11 python3-pip java-common
 
 RUN wget https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.deb && \
     dpkg -i amazon-corretto-8-x64-linux-jdk.deb
