@@ -86,25 +86,52 @@ resource "google_compute_instance" "scylla_vm" {
   tags = ["scylla-vm"]
 }
 
+resource "google_compute_instance" "ycsb_vm" {
+  name         = "ycsb-vm"
+  machine_type = "n2d-standard-2"
+  zone         = "us-central1-a"
 
-resource "google_compute_firewall" "postgres_firewall" {
-  name    = "postgres-firewall"
-  network = "default"
-  allow {
-    protocol = "tcp"
-    ports    = ["5433"]
+  boot_disk {
+    initialize_params {
+      image = "cos-cloud/cos-stable"
+    }
   }
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["postgres-vm"]
+
+  network_interface {
+    network = "default"
+    access_config {}
+  }
+
+  depends_on = [ google_compute_instance.postgres_vm, google_compute_instance.scylla_vm ]
+
+  metadata_startup_script = <<EOF
+    #!/bin/bash
+    git clone https://github.com/char26/cse239-cloud-storage.git && cd cse239-cloud-storage/ycsb
+    docker build . -t ycsb
+    docker run -it ycsb postgres ${google_compute_instance.postgres_vm.network_interface[0].network_ip} workloada
+  EOF
+
+  tags = ["ycsb-vm"]
 }
 
-resource "google_compute_firewall" "scylla_firewall" {
-  name    = "scylla-firewall"
-  network = "default"
-  allow {
-    protocol = "tcp"
-    ports    = ["9042"]
-  }
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["scylla-vm"]
-}
+# resource "google_compute_firewall" "postgres_firewall" {
+#   name    = "postgres-firewall"
+#   network = "default"
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["5433"]
+#   }
+#   source_ranges = ["0.0.0.0/0"]
+#   target_tags   = ["postgres-vm"]
+# }
+
+# resource "google_compute_firewall" "scylla_firewall" {
+#   name    = "scylla-firewall"
+#   network = "default"
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["9042"]
+#   }
+#   source_ranges = ["0.0.0.0/0"]
+#   target_tags   = ["scylla-vm"]
+# }
