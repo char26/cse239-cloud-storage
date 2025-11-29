@@ -17,4 +17,5 @@ COPY . .
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ENTRYPOINT ["/bin/bash", "./run_ycsb.sh"]
-CMD ["postgres", "localhost", "workloada"]
+# CMD database, ip_address, workload, threads
+CMD ["postgres", "localhost", "workloada", "4"]

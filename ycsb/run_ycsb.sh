@@ -14,6 +14,10 @@ if [ -z "$workload" ]; then
     echo "No workload specified. Usage: $0 <database> <ip_address> <workload>"
     exit 1
 fi
+threads=$4
+if [ -z "$threads" ]; then
+    threads=1
+fi
 
 if [ "$database" = "postgres" ]; then
     # Ensure postgrenosql.properties exists
@@ -31,14 +35,14 @@ if [ "$database" = "postgres" ]; then
         sed -i "1s|^postgrenosql\.url =.*$|postgrenosql.url = jdbc:postgresql://$ip_address:5433/test|" ./postgrenosql.properties
     fi
 
-    ./ycsb-0.17.0/bin/ycsb.sh load postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties
+    ./ycsb-0.17.0/bin/ycsb.sh load postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -threads $threads
 
-    ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties
+    ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -threads $threads
 
 elif [ "$database" = "scylla" ]; then
-    ./ycsb-0.17.0/bin/ycsb.sh load cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042
+    ./ycsb-0.17.0/bin/ycsb.sh load cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads
 
-    ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042
+    ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads
 else
     echo "Invalid database specified. Usage: $0 <database> <workload>"
     exit 1

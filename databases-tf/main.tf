@@ -93,7 +93,7 @@ resource "google_compute_instance" "ycsb_vm" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-12"
+      image = "cos-cloud/cos-stable"
     }
   }
 
@@ -105,52 +105,10 @@ resource "google_compute_instance" "ycsb_vm" {
   depends_on = [ google_compute_instance.postgres_vm, google_compute_instance.scylla_vm ]
 
   metadata_startup_script = <<EOF
-    #!/bin/bash
-    # Add Docker's official GPG key:
-    sudo apt update
-    sudo apt install -y ca-certificates curl git
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    sudo tee /etc/apt/sources.list.d/docker.sources <<DOCKER_KEY
-    Types: deb
-    URIs: https://download.docker.com/linux/debian
-    Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
-    Components: stable
-    Signed-By: /etc/apt/keyrings/docker.asc
-    DOCKER_KEY
-
-    sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-    git clone https://github.com/char26/cse239-cloud-storage.git
-    cd cse239-cloud-storage/ycsb
-    docker build . -t ycsb
-    docker run -it ycsb postgres ${google_compute_instance.postgres_vm.network_interface[0].network_ip} workloada
+  #!/bin/bash
+  docker pull char26/ycsb:latest
+  docker run -t char26/ycsb:latest postgres ${google_compute_instance.postgres_vm.network_interface[0].network_ip} workloada |& tee /var/log/ycsb_postgres_workloada.log
   EOF
 
   tags = ["ycsb-vm"]
 }
-
-# resource "google_compute_firewall" "postgres_firewall" {
-#   name    = "postgres-firewall"
-#   network = "default"
-#   allow {
-#     protocol = "tcp"
-#     ports    = ["5433"]
-#   }
-#   source_ranges = ["0.0.0.0/0"]
-#   target_tags   = ["postgres-vm"]
-# }
-
-# resource "google_compute_firewall" "scylla_firewall" {
-#   name    = "scylla-firewall"
-#   network = "default"
-#   allow {
-#     protocol = "tcp"
-#     ports    = ["9042"]
-#   }
-#   source_ranges = ["0.0.0.0/0"]
-#   target_tags   = ["scylla-vm"]
-# }
