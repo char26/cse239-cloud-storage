@@ -107,7 +107,6 @@ resource "google_compute_instance" "ycsb_vm" {
   metadata_startup_script = <<EOF
   #!/bin/bash
   docker pull char26/ycsb:latest
-  docker run -t char26/ycsb:latest postgres ${google_compute_instance.postgres_vm.network_interface[0].network_ip} workloada |& tee /var/log/ycsb_postgres_workloada.log
   EOF
 
   tags = ["ycsb-vm"]
