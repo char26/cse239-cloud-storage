@@ -54,9 +54,22 @@ Create the infrastructure
 
 ```sh
 terraform init
-terraform fmt
-terraform validate
+terraform fmt && terraform validate
 terraform apply
+```
+
+SSH into the benchmarking VM
+
+```sh
+gcloud compute ssh benchmark-vm
+```
+
+Run benchmarks
+
+```sh
+docker run -it ycsb ./run_load.sh postgres [pg_ip]
+docker run -it ycsb ./run_stress.sh postgres [pg_ip]
+docker run -it ycsb ./run_soak.sh postgres [pg_ip]
 ```
 
 Destroy the infrastructure
@@ -64,12 +77,6 @@ Destroy the infrastructure
 ```sh
 terraform destroy
 ```
-
-## Next Steps:
-
-We'll need to download the latest YCSB release, extracting it into a directory named ycsb (the benchmark will look for this directory).
-
-After that, we should be able to deploy the VM instances created by Terraform, and run the benchmarks.
 
 ## Nautilus
 
@@ -82,6 +89,6 @@ Run YCSB workloadb against the local postgres and scylla databases
 ```sh
 cd ycsb
 docker build . -t ycsb
-docker run -it --network cse239-cloud-storage_default ycsb postgres workloadb
-docker run -it --network cse239-cloud-storage_default ycsb scylla workloadb
+docker run -it --network cse239-cloud-storage_default ycsb ./run_stress postgres localhost
+docker run -it --network cse239-cloud-storage_default ycsb ./run_stress scylla localhost
 ```

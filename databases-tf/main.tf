@@ -86,8 +86,8 @@ resource "google_compute_instance" "scylla_vm" {
   tags = ["scylla-vm"]
 }
 
-resource "google_compute_instance" "ycsb_vm" {
-  name         = "ycsb-vm"
+resource "google_compute_instance" "benchmark_vm" {
+  name         = "benchmark-vm"
   machine_type = "n2d-standard-2"
   zone         = "us-central1-a"
 
@@ -107,7 +107,8 @@ resource "google_compute_instance" "ycsb_vm" {
   metadata_startup_script = <<EOF
   #!/bin/bash
   docker pull char26/ycsb:latest
+  docker pull postgres:9.6
   EOF
 
-  tags = ["ycsb-vm"]
+  tags = ["benchmark-vm"]
 }
