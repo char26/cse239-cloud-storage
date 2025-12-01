@@ -1,10 +1,9 @@
 #!/bin/bash
 
 workload="workloada"
-TARGETS=(100 200 500 1000 2500 5000 10000)
+TARGETS=(200 500 1000 2500 5000 10000 20000)
 
 threads=8
-operationcount=1000000
 
 database=$1
 ip_address=$2
@@ -60,6 +59,8 @@ fi
 
 # RUNNING THE BENCHMARK
 for target in "${TARGETS[@]}"; do
+    # Scale operation count with target: 50 ops per target unit
+    operationcount=$((target * 50))
     if [ "$database" = "postgres" ]; then
         ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -target $target -threads $threads -p operationcount=$operationcount \
         2>&1 | tee -a "$RESULTS_DIR/postgres_load.txt"

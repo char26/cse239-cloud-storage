@@ -26,12 +26,16 @@ resource "google_compute_instance" "postgres_vm" {
 
   scratch_disk {
     interface = "NVME"
-    size = 375
+    size      = 375
   }
 
   network_interface {
     network = "default"
     access_config {}
+  }
+
+  metadata = {
+    google-logging-enabled = "true"
   }
 
   metadata_startup_script = <<EOF
@@ -68,7 +72,7 @@ resource "google_compute_instance" "scylla_vm" {
 
   scratch_disk {
     interface = "NVME"
-    size = 375
+    size      = 375
   }
 
   network_interface {
@@ -131,7 +135,7 @@ resource "google_compute_instance" "benchmark_vm" {
     google-logging-enabled = "true"
   }
 
-  depends_on = [ google_compute_instance.postgres_vm, google_compute_instance.scylla_vm ]
+  depends_on = [google_compute_instance.postgres_vm, google_compute_instance.scylla_vm]
 
   metadata_startup_script = <<EOF
   #!/bin/bash

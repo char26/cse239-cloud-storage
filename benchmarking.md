@@ -4,6 +4,12 @@
 
 For simplicity and "fairness" (though this test is not necessarily fair), we will start with just a single Scylla node on the same size VM as a Postgres instance. We should consider additional Scylla nodes after recording primary benchmarks.
 
+The comparisons that do not consider additional VM sizes will be run on `n2d-standard-2` VMs, which have 2 vCPUs and 8GB of memory. All VMs are given a 375GB NVME SSD that is mounted to the corresponding database instance.
+
+The benchmarking VM will also be of size `n2d-standard-2`, but without the NVME drive.
+
+We are defaulting to `workloada` from YCSB, which is a 50/50 split of reads and updates.
+
 ## YCSB
 
 All tests should be run against a database loaded with 10,000,000 records.
