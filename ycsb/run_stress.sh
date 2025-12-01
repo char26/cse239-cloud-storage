@@ -1,6 +1,5 @@
 #!/bin/bash
 
-recordcount=100000000
 workload="workloada"
 
 threads=25
@@ -34,12 +33,12 @@ echo "Running YCSB with:"
 echo "  Database: $database"
 echo "  Workload: $workload"
 echo "  IP address: $ip_address"
-echo "  Record count: $recordcount"
 echo "  Operation count: $operationcount"
 echo "  Threads: $threads"
 echo ""
 
-# INITIAL LOADING
+# THIS FILE EXPECTS THE DATABASE TO BE LOADED BEFOREHAND
+# RUN insert_postgres.sh OR insert_scylla.sh BEFORE RUNNING THIS FILE
 
 if [ "$database" = "postgres" ]; then
     # Ensure postgrenosql.properties exists
@@ -56,16 +55,6 @@ if [ "$database" = "postgres" ]; then
         # Linux
         sed -i "1s|^postgrenosql\.url =.*$|postgrenosql.url = jdbc:postgresql://$ip_address:5433/test|" ./postgrenosql.properties
     fi
-
-    ./ycsb-0.17.0/bin/ycsb.sh load postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -threads $threads -p recordcount=$recordcount
-
-elif [ "$database" = "scylla" ]; then
-    ./ycsb-0.17.0/bin/ycsb.sh load cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p recordcount=$recordcount
-
-else
-    echo "Invalid database specified. Supported: postgres, scylla"
-    echo "Usage: $0 <database> <workload> -i <ip_address> [-r <recordcount>] [-o <operationcount>] [-t <threads>]"
-    exit 1
 fi
 
 # RUNNING THE BENCHMARK
@@ -77,6 +66,10 @@ for target in "${TARGETS[@]}"; do
     elif [ "$database" = "scylla" ]; then
         ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p operationcount=$operationcount \
         2>&1 | tee -a "$RESULTS_DIR/scylla_stress.txt"
+    else
+        echo "Invalid database specified. Supported: postgres, scylla"
+        echo "Usage: $0 <database> <workload> -i <ip_address> [-r <recordcount>] [-o <operationcount>] [-t <threads>]"
+        exit 1
     fi
 done
 

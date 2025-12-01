@@ -54,8 +54,14 @@ Create the infrastructure
 
 ```sh
 terraform init
-terraform fmt && terraform validate
 terraform apply
+```
+
+Copy IP addresses from the VMs
+
+```sh
+export PG_IP=$(gcloud compute instances describe postgres-vm --zone us-central1-a --format='get(networkInterfaces[0].networkIP)')
+export SCYLLA_IP=$(gcloud compute instances describe scylla-vm --zone us-central1-a --format='get(networkInterfaces[0].networkIP)')
 ```
 
 SSH into the benchmarking VM
@@ -67,12 +73,16 @@ gcloud compute ssh benchmark-vm
 Run benchmarks
 
 ```sh
-docker run -it ycsb ./run_load.sh postgres [pg_ip]
-docker run -it ycsb ./run_stress.sh postgres [pg_ip]
-docker run -it ycsb ./run_soak.sh postgres [pg_ip]
+# Run the YCSB insertion to load the Postgres database
+docker run -it char26/ycsb ./insert_postgres.sh $PG_IP
+
+# Run different test configurations
+docker run -it char26/ycsb ./run_load.sh postgres $PG_IP
+docker run -it char26/ycsb ./run_stress.sh postgres $PG_IP
+docker run -it char26/ycsb ./run_soak.sh postgres $PG_IP
 ```
 
-Destroy the infrastructure
+Don't forget to destroy the infrastructure
 
 ```sh
 terraform destroy

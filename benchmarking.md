@@ -2,12 +2,12 @@
 
 ## VM Setup
 
-Scylla: 3 nodes on the same machine?
+For simplicity and "fairness" (though this test is not necessarily fair), we will start with just a single Scylla node on the same size VM as a Postgres instance. We should consider additional Scylla nodes after recording primary benchmarks.
 
 ## YCSB
 
-All tests should be run against a database loaded with 100,000,000 records.
-`recordcount`: 100,000,000
+All tests should be run against a database loaded with 10,000,000 records.
+`recordcount`: 10,000,000
 
 Operation count effectively controls how long the test runs for.
 
@@ -33,6 +33,6 @@ Many threads, medium operation count, no target throughput (unlimited)
 
 ### Compare VM Sizes (Cost comparison)
 
-Run stress test against multiple VM sizes?
+Run stress test against multiple VM sizes for Postgres and Scylla
 
-Postgres has its own GCP service with built-in auto scaling, but that wouldn't be much of a comparison if Scylla doesn't.
+Postgres has its own GCP service with built-in auto scaling, but that wouldn't be much of a comparison since Scylla doesn't.

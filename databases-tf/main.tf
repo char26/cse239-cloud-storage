@@ -24,6 +24,11 @@ resource "google_compute_instance" "postgres_vm" {
     }
   }
 
+  scratch_disk {
+    interface = "NVME"
+    size = 375
+  }
+
   network_interface {
     network = "default"
     access_config {}
@@ -31,7 +36,12 @@ resource "google_compute_instance" "postgres_vm" {
 
   metadata_startup_script = <<EOF
     #!/bin/bash
-    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres -p 5433:5432 postgres:9.6
+    NVME_DEVICE=$(ls /dev/nvme0n* | grep -v nvme0n1p || ls /dev/nvme0n1)
+    sudo mkfs -t ext4 -F $NVME_DEVICE
+    sudo mount $NVME_DEVICE /var/lib/postgresql/data
+    sudo chmod 777 /var/lib/postgresql/data
+
+    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres --volume /var/lib/postgresql/data:/var/lib/postgresql/data -p 5433:5432 postgres:9.6
 
     until docker exec -u postgres postgres psql -h localhost -U postgres -c "CREATE DATABASE test;"; do
       echo "Postgres not ready, retrying in 1s..."
@@ -56,14 +66,29 @@ resource "google_compute_instance" "scylla_vm" {
     }
   }
 
+  scratch_disk {
+    interface = "NVME"
+    size = 375
+  }
+
   network_interface {
     network = "default"
     access_config {}
   }
 
+  metadata = {
+    google-logging-enabled = "true"
+  }
+
   metadata_startup_script = <<EOF
     #!/bin/bash
-    docker run --name scylla --hostname scylla -p 9042:9042 -d scylladb/scylla
+    sudo mkdir -p /var/lib/scylla/data /var/lib/scylla/commitlog /var/lib/scylla/hints /var/lib/scylla/view_hints
+    NVME_DEVICE=$(ls /dev/nvme0n* | grep -v nvme0n1p || ls /dev/nvme0n1)
+    sudo mkfs -t ext4 -F $NVME_DEVICE
+    sudo mount $NVME_DEVICE /var/lib/scylla
+    sudo chmod 777 /var/lib/scylla
+
+    docker run --name scylla --volume /var/lib/scylla:/var/lib/scylla --hostname scylla -p 9042:9042 -d scylladb/scylla
 
     until docker exec scylla cqlsh -e "CREATE KEYSPACE IF NOT EXISTS ycsb WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 3};" |& grep -vq "Connection error"; do
       sleep 1
@@ -100,6 +125,10 @@ resource "google_compute_instance" "benchmark_vm" {
   network_interface {
     network = "default"
     access_config {}
+  }
+
+  metadata = {
+    google-logging-enabled = "true"
   }
 
   depends_on = [ google_compute_instance.postgres_vm, google_compute_instance.scylla_vm ]
