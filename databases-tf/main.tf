@@ -45,7 +45,7 @@ resource "google_compute_instance" "postgres_vm" {
     sudo mount $NVME_DEVICE /var/lib/postgresql/data
     sudo chmod 777 /var/lib/postgresql/data
 
-    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres --volume /var/lib/postgresql/data:/var/lib/postgresql/data -p 5433:5432 postgres:9.6
+    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres --volume /postgres:/var/lib/postgresql/data -p 5433:5432 postgres:9.6
 
     until docker exec -u postgres postgres psql -h localhost -U postgres -c "CREATE DATABASE test;"; do
       echo "Postgres not ready, retrying in 1s..."

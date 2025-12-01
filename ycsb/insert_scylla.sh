@@ -24,7 +24,7 @@ mkdir -p "$RESULTS_DIR"
 
 # INSERT DATA
 
-./ycsb-0.17.0/bin/ycsb.sh load cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p recordcount=$recordcount \
+./ycsb-0.17.0/bin/ycsb.sh load cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p recordcount=$recordcount -s \
 2>&1 | tee -a "$RESULTS_DIR/insert_scylla.txt"
 
 

@@ -21,6 +21,17 @@ if [ -z "$ip_address" ]; then
     exit 1
 fi
 
+shift 2
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -t)
+            threads=$2
+            shift 2
+            ;;
+    esac
+done
+
 # Create results directory
 RESULTS_DIR="ycsb_results"
 mkdir -p "$RESULTS_DIR"
@@ -60,15 +71,15 @@ fi
 # RUNNING THE BENCHMARK
 for target in "${TARGETS[@]}"; do
     if [ "$database" = "postgres" ]; then
-        ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -threads $threads -p operationcount=$operationcount \
+        ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -threads $threads -p operationcount=$operationcount -s \
         2>&1 | tee -a "$RESULTS_DIR/postgres_stress.txt"
 
     elif [ "$database" = "scylla" ]; then
-        ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p operationcount=$operationcount \
+        ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -threads $threads -p operationcount=$operationcount -s \
         2>&1 | tee -a "$RESULTS_DIR/scylla_stress.txt"
     else
         echo "Invalid database specified. Supported: postgres, scylla"
-        echo "Usage: $0 <database> <workload> -i <ip_address> [-r <recordcount>] [-o <operationcount>] [-t <threads>]"
+        echo "Usage: $0 <database> <ip_address>"
         exit 1
     fi
 done

@@ -21,6 +21,17 @@ if [ -z "$ip_address" ]; then
     exit 1
 fi
 
+shift 2
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -t)
+            threads=$2
+            shift 2
+            ;;
+    esac
+done
+
 # Create results directory
 RESULTS_DIR="ycsb_results"
 mkdir -p "$RESULTS_DIR"
@@ -62,11 +73,11 @@ for target in "${TARGETS[@]}"; do
     # Scale operation count with target: 50 ops per target unit
     operationcount=$((target * 50))
     if [ "$database" = "postgres" ]; then
-        ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -target $target -threads $threads -p operationcount=$operationcount \
+        ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -target $target -threads $threads -p operationcount=$operationcount -s \
         2>&1 | tee -a "$RESULTS_DIR/postgres_load.txt"
 
     elif [ "$database" = "scylla" ]; then
-        ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -target $target -threads $threads -p operationcount=$operationcount \
+        ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -target $target -threads $threads -p operationcount=$operationcount -s \
         2>&1 | tee -a "$RESULTS_DIR/scylla_load.txt"
     else
         echo "Invalid database specified. Supported: postgres, scylla"

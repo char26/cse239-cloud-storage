@@ -22,6 +22,12 @@ Truncate Postgres YCSB table
 
 ```sh
 docker run --rm postgres:9.6 psql \
-  postgresql://postgres:changeme@10.128.0.30:5433/test \
+  postgresql://postgres:changeme@<ip_address>:5433/test \
   -c "TRUNCATE TABLE usertable;"
+```
+
+pgbench run command
+
+```sh
+docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h 10.128.0.47 -p 5433 -U postgres -d test --client 30 --jobs 8 --transactions 5000
 ```
