@@ -37,7 +37,7 @@ done
 RESULTS_DIR="ycsb_results"
 mkdir -p "$RESULTS_DIR"
 
-echo "Running soak test..."
+echo "-- Soak test --"
 echo "Results will be saved to: $RESULTS_DIR"
 echo ""
 
@@ -67,14 +67,18 @@ if [ "$database" = "postgres" ]; then
         # Linux
         sed -i "1s|^postgrenosql\.url =.*$|postgrenosql.url = jdbc:postgresql://$ip_address:5433/test|" ./postgrenosql.properties
     fi
+
+    echo "Postgres properties file: $(cat ./postgrenosql.properties)"
 fi
 
 # RUNNING THE BENCHMARK
 if [ "$database" = "postgres" ]; then
+    echo "Running Postgres soak test..."
     ./ycsb-0.17.0/bin/ycsb.sh run postgrenosql -P ./ycsb-0.17.0/workloads/$workload -P ./postgrenosql.properties -target $target -threads $threads -p operationcount=$operationcount -s \
     2>&1 | tee -a "$RESULTS_DIR/postgres_soak.txt"
 
 elif [ "$database" = "scylla" ]; then
+    echo "Running Scylla soak test..."
     ./ycsb-0.17.0/bin/ycsb.sh run cassandra-cql -P ./ycsb-0.17.0/workloads/$workload -p hosts=$ip_address -p port=9042 -target $target -threads $threads -p operationcount=$operationcount -s \
     2>&1 | tee -a "$RESULTS_DIR/scylla_soak.txt"
 else

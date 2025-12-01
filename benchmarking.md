@@ -37,6 +37,8 @@ Long test under reasonable load.
 
 Many threads, medium operation count, no target throughput (unlimited)
 
+Unfortunate limitation: Postgres deadlocks will multiple YCSB threads.
+
 ### Compare VM Sizes (Cost comparison)
 
 Run stress test against multiple VM sizes for Postgres and Scylla
