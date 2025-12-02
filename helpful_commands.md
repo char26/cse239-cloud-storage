@@ -29,5 +29,5 @@ docker run --rm postgres:9.6 psql \
 pgbench run command
 
 ```sh
-docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h 10.128.0.47 -p 5433 -U postgres -d test --client 30 --jobs 8 --transactions 5000
+docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h <ip_address> -p 5433 -U postgres -d test --client 30 --jobs 8 --transactions 5000
 ```

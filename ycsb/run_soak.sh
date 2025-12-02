@@ -4,7 +4,7 @@ workload="workloada"
 target=3000
 
 threads=8
-operationcount=50000000
+operationcount=10000000
 
 database=$1
 ip_address=$2
@@ -28,6 +28,10 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         -t)
             threads=$2
+            shift 2
+            ;;
+        -o)
+            operationcount=$2
             shift 2
             ;;
     esac

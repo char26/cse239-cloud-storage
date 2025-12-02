@@ -69,14 +69,14 @@ gcloud compute instances describe scylla-vm --zone us-central1-a --format='get(n
 SSH into the benchmarking VM
 
 ```sh
-gcloud compute ssh benchmark-vm
+gcloud compute ssh benchmark-vm --zone us-central1-a
 ```
 
 Run benchmarks
 
 ```sh
 # Run the YCSB insertion to load the Postgres database
-docker run -it char26/ycsb ./insert_postgres.sh [PG_IP_ADDRESS]
+docker run -it char26/ycsb ./insert_postgres.sh [PG_IP_ADDRESS] -t 1
 
 # Run different test configurations
 docker run -it char26/ycsb ./run_load.sh postgres [PG_IP_ADDRESS] -t 1
