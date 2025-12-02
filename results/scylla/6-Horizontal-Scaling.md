@@ -1,0 +1,1 @@
+# Scylla Horizontal Scaling

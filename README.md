@@ -53,23 +53,42 @@ gcloud auth application-default login
 Create the infrastructure
 
 ```sh
+cd terraform
 terraform init
-terraform fmt
-terraform validate
 terraform apply
 ```
 
-Destroy the infrastructure
+Copy IP addresses from the VMs
+
+```sh
+gcloud compute instances describe postgres-vm --zone us-central1-a --format='get(networkInterfaces[0].networkIP)'
+
+gcloud compute instances describe scylla-vm --zone us-central1-a --format='get(networkInterfaces[0].networkIP)'
+```
+
+SSH into the benchmarking VM
+
+```sh
+gcloud compute ssh benchmark-vm --zone us-central1-a
+```
+
+Run benchmarks
+
+```sh
+# Run the YCSB insertion to load the Postgres database
+docker run -it char26/ycsb ./insert_postgres.sh [PG_IP_ADDRESS] -t 1
+
+# Run different test configurations
+docker run -it char26/ycsb ./run_load.sh postgres [PG_IP_ADDRESS] -t 1
+docker run -it char26/ycsb ./run_stress.sh postgres [PG_IP_ADDRESS] -t 1
+docker run -it char26/ycsb ./run_soak.sh postgres [PG_IP_ADDRESS] -t 1
+```
+
+Don't forget to destroy the infrastructure
 
 ```sh
 terraform destroy
 ```
-
-## Next Steps:
-
-We'll need to download the latest YCSB release, extracting it into a directory named ycsb (the benchmark will look for this directory).
-
-After that, we should be able to deploy the VM instances created by Terraform, and run the benchmarks.
 
 ## Nautilus
 
@@ -82,6 +101,7 @@ Run YCSB workloadb against the local postgres and scylla databases
 ```sh
 cd ycsb
 docker build . -t ycsb
-docker run -it --network cse239-cloud-storage_default ycsb postgres workloadb
-docker run -it --network cse239-cloud-storage_default ycsb scylla workloadb
+docker run -it --network host ycsb insert_postgres.sh localhost -t 1 -r 10000
+
+docker run -it --network host ycsb run_stress.sh postgres localhost -t 1
 ```

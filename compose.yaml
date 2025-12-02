@@ -3,12 +3,13 @@ services:
     image: postgres:9.6
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: changeme
       POSTGRES_DB: test
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./ycsb/init_postgres.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - default
 
