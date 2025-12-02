@@ -40,13 +40,13 @@ resource "google_compute_instance" "postgres_vm" {
 
   metadata_startup_script = <<EOF
     #!/bin/bash
-    sudo mkdir -p ~/postgres/data
+    sudo mkdir -p /var/lib/postgres/data
     NVME_DEVICE=$(ls /dev/nvme0n* | grep -v nvme0n1p || ls /dev/nvme0n1)
     sudo mkfs -t ext4 -F $NVME_DEVICE
-    sudo mount $NVME_DEVICE ~/postgres
-    sudo chmod 777 ~/postgres
+    sudo mount $NVME_DEVICE /var/lib/postgres
+    sudo chmod 777 /var/lib/postgres
 
-    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres --volume ~/postgres/data:/var/lib/postgresql/data -p 5433:5432 postgres:9.6
+    docker run -e POSTGRES_PASSWORD=changeme -d --name postgres --volume /var/lib/postgres/data:/var/lib/postgresql/data -p 5433:5432 postgres:9.6
 
     until docker exec -u postgres postgres psql -h localhost -U postgres -c "CREATE DATABASE test;"; do
       echo "Postgres not ready, retrying in 1s..."
@@ -118,7 +118,7 @@ resource "google_compute_instance" "scylla_vm" {
 
 resource "google_compute_instance" "benchmark_vm" {
   name         = "benchmark-vm"
-  machine_type = "n2d-standard-2"
+  machine_type = "n4-standard-2"
   zone         = "us-central1-a"
 
   boot_disk {
@@ -142,6 +142,7 @@ resource "google_compute_instance" "benchmark_vm" {
   #!/bin/bash
   docker pull char26/ycsb:latest
   docker pull postgres:9.6
+  docker pull scylladb/cassandra-stress:latest
   EOF
 
   tags = ["benchmark-vm"]

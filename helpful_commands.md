@@ -29,5 +29,13 @@ docker run --rm postgres:9.6 psql \
 pgbench run command
 
 ```sh
-docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h <ip_address> -p 5433 -U postgres -d test --client 30 --jobs 8 --transactions 5000
+docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h <ip_address> -p 5433 -U postgres -d test -i
+docker run -e PGPASSWORD=changeme --rm postgres:9.6 pgbench -h <ip_address> -p 5433 -U postgres -d test --client 8 --jobs 8 --transactions 5000
+```
+
+cassandra-stress
+
+```sh
+docker run --rm --network=host --security-opt seccomp=unconfined scylladb/cassandra-stress 'write n=1000000 -node <ip_address>'
+docker run --rm --network=host --security-opt seccomp=unconfined scylladb/cassandra-stress 'read n=1000000 -node <ip_address>'
 ```
