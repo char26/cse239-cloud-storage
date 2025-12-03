@@ -16,14 +16,10 @@ RUN_LABELS: Dict[str, str] = {
 }
 
 def parse_filename(stem: str):
-    # Pases filename like t1-20251123-000711 into trial_id, run_id
-    # tx is trial id, numbers are run id
-    m = re.match(r'^(t\d+)-(\d{8}-\d{6})$', stem)
-    if m:
-        trial_id = m.group(1)
-        run_id = m.group(2)
-    else:
-        raise FileNotFoundError # May not be the exact correct error but this should never occur
+    # Pases filename like 1-Insert into trial_id, run_id
+    # We will use the stem as the run_id, and a default trial_id
+    trial_id = "t1"
+    run_id = stem
     return trial_id, run_id
 
 def parse_ycsb_log(path: Path, db_name: str):
@@ -50,7 +46,8 @@ def parse_ycsb_log(path: Path, db_name: str):
             value_str = m.group(3).strip()
 
             try:
-                value = float(value_str)
+                # Remove commas from the value string
+                value = float(value_str.replace(",", ""))
             except ValueError:
                 value = value_str
 
@@ -72,20 +69,26 @@ def collect_metrics(logs_dir: Path) -> pd.DataFrame:
     all_rows: List[Dict] = []
 
     if not logs_dir.exists():
-        raise FileNotFoundError(f"Message")
+        raise FileNotFoundError(f"Directory not found: {logs_dir}")
 
     for db_dir in logs_dir.iterdir():
+        # Skip non-directories or folders that should be ignored
         if not db_dir.is_dir():
             continue
-            
+        IGNORED_DIRS = {"screenshots", "figures", ".git", "__pycache__"}
+        if db_dir.name.lower() in IGNORED_DIRS:
+            continue
+
         db_name = db_dir.name
-        for log_path in db_dir.glob("*.log"):
+
+        # Only parse .md files
+        for log_path in db_dir.glob("*.md"):
             rows = parse_ycsb_log(log_path, db_name)
             all_rows.extend(rows)
-    
+
     if not all_rows:
-        raise RuntimeError("No Metrics")
-    
+        raise RuntimeError(f"No metrics found under {logs_dir}")
+
     df = pd.DataFrame(all_rows)
     return df
 
@@ -165,7 +168,7 @@ def main():
     parser.add_argument(
         "--logs-dir",
         type=str,
-        default="logs",
+        default="results",
         help="Path to the logs directory (default: logs)",
     )
     parser.add_argument(
