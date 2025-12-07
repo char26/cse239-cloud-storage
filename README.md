@@ -1,6 +1,6 @@
 # cse239-cloud-storage
 
-Note: If you are another group looking to deploy our project head to the [Nautilus instructions below](#nautilus).
+Note: If you are another group looking to deploy our project head to the [Nautilus/local instructions below](#nautilus).
 
 ## Installation Prerequisites
 
@@ -90,18 +90,25 @@ Don't forget to destroy the infrastructure
 terraform destroy
 ```
 
-## Nautilus
+## Nautilus or Local Deployment
+
+Assuming you have shell access to the machine you are deploying to:
 
 ```sh
-docker compose up
+git clone git@github.com:char26/cse239-cloud-storage.git
+cd cse239-cloud-storage
+docker compose up -d
+./compose_init_scylla.sh
 ```
 
-Run YCSB workloadb against the local postgres and scylla databases
+Run YCSB workloada against local Scylla database
 
 ```sh
-cd ycsb
-docker build . -t ycsb
-docker run -it --network host ycsb insert_postgres.sh localhost -t 1 -r 10000
+docker run -it --network host char26/ycsb run_ycsb.sh scylla workloada -i localhost -r 10000 -o 50000 -t 8
+```
 
-docker run -it --network host ycsb run_stress.sh postgres localhost -t 1
+Run YCSB workloada against the local Postgres
+
+```sh
+docker run -it --network host char26/ycsb run_ycsb.sh postgres workloada -i localhost -r 10000 -o 50000 -t 1
 ```
