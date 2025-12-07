@@ -39,3 +39,15 @@ cassandra-stress
 docker run --rm --network=host --security-opt seccomp=unconfined scylladb/cassandra-stress 'write n=1000000 -node <ip_address>'
 docker run --rm --network=host --security-opt seccomp=unconfined scylladb/cassandra-stress 'read n=1000000 -node <ip_address>'
 ```
+
+Delete GCP instance
+
+```sh
+gcloud compute instances delete scylla-node1
+```
+
+Create Scylla Node
+
+```sh
+gcloud compute instances create scylla-node1 --image scylladb-5-2-1 --image-project scylla-images --local-ssd interface=nvme --machine-type=n1-highmem-8 --zone=us-central1-a
+```
