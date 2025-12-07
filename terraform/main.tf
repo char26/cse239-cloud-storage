@@ -132,12 +132,6 @@ resource "google_compute_instance" "benchmark_vm" {
     access_config {}
   }
 
-  metadata = {
-    google-logging-enabled = "true"
-  }
-
-  depends_on = [google_compute_instance.postgres_vm, google_compute_instance.scylla_vm]
-
   metadata_startup_script = <<EOF
   #!/bin/bash
   docker pull char26/ycsb:latest

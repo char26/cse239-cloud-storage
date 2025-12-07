@@ -1,6 +1,6 @@
 # cse239-cloud-storage
 
-Note: If you are another group looking to deploy our project head to the [Nautilus/local instructions below](#nautilus).
+Note: If you are another group looking to deploy our project head to the [Nautilus/local instructions below](#peer-deployment).
 
 ## Installation Prerequisites
 
@@ -90,7 +90,7 @@ Don't forget to destroy the infrastructure
 terraform destroy
 ```
 
-## Nautilus or Local Deployment
+## Peer Deployment
 
 Assuming you have shell access to the machine you are deploying to:
 
