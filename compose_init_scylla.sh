@@ -1,8 +1,15 @@
-until docker exec cse239-cloud-storage-scylla-1 cqlsh -e "CREATE KEYSPACE IF NOT EXISTS ycsb WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 3};"; do
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  image_name="cse239-cloud-storage-scylla-1"
+else
+  image_name="cse239-cloud-storage_scylla_1"
+fi
+
+until docker exec $image_name cqlsh -e "CREATE KEYSPACE IF NOT EXISTS ycsb WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 3};"; do
       sleep 1
     done
 
-docker exec cse239-cloud-storage-scylla-1 cqlsh -e "CREATE TABLE ycsb.usertable (
+docker exec $image_name cqlsh -e "CREATE TABLE ycsb.usertable (
   y_id varchar primary key,
   field0 varchar,
   field1 varchar,
