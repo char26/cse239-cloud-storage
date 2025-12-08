@@ -75,23 +75,23 @@ Improvement over 104 threadCount: 2%
 
 ```
 Results:
-Op rate                   :   61,507 op/s  [READ: 61,507 op/s]
-Partition rate            :   61,507 pk/s  [READ: 61,507 pk/s]
-Row rate                  :   61,507 row/s [READ: 61,507 row/s]
-Latency mean              :    4.8 ms [READ: 4.8 ms]
-Latency median            :    4.2 ms [READ: 4.2 ms]
-Latency 95th percentile   :   10.3 ms [READ: 10.3 ms]
-Latency 99th percentile   :   15.6 ms [READ: 15.6 ms]
-Latency 99.9th percentile :   27.6 ms [READ: 27.6 ms]
-Latency max               :   59.3 ms [READ: 59.3 ms]
-Total partitions          :  1,000,000 [READ: 1,000,000]
-Total errors              :          0 [READ: 0]
-Total GC count            : 0
-Total GC memory           : 0.000 KiB
-Total GC time             :    0.0 seconds
-Avg GC time               :    NaN ms
-StdDev GC time            :    0.0 ms
-Total operation time      : 00:00:16
+Op rate : 61,507 op/s [READ: 61,507 op/s]
+Partition rate : 61,507 pk/s [READ: 61,507 pk/s]
+Row rate : 61,507 row/s [READ: 61,507 row/s]
+Latency mean : 4.8 ms [READ: 4.8 ms]
+Latency median : 4.2 ms [READ: 4.2 ms]
+Latency 95th percentile : 10.3 ms [READ: 10.3 ms]
+Latency 99th percentile : 15.6 ms [READ: 15.6 ms]
+Latency 99.9th percentile : 27.6 ms [READ: 27.6 ms]
+Latency max : 59.3 ms [READ: 59.3 ms]
+Total partitions : 1,000,000 [READ: 1,000,000]
+Total errors : 0 [READ: 0]
+Total GC count : 0
+Total GC memory : 0.000 KiB
+Total GC time : 0.0 seconds
+Avg GC time : NaN ms
+StdDev GC time : 0.0 ms
+Total operation time : 00:00:16
 
 Improvement over 204 threadCount: 12%
 ```
@@ -100,23 +100,23 @@ Improvement over 204 threadCount: 12%
 
 ```
 Results:
-Op rate                   :   46,488 op/s  [READ: 46,488 op/s]
-Partition rate            :   46,488 pk/s  [READ: 46,488 pk/s]
-Row rate                  :   46,488 row/s [READ: 46,488 row/s]
-Latency mean              :    8.3 ms [READ: 8.3 ms]
-Latency median            :    5.8 ms [READ: 5.8 ms]
-Latency 95th percentile   :   14.7 ms [READ: 14.7 ms]
-Latency 99th percentile   :   22.7 ms [READ: 22.7 ms]
-Latency 99.9th percentile :  704.6 ms [READ: 704.6 ms]
-Latency max               : 2533.4 ms [READ: 2,533.4 ms]
-Total partitions          :  1,000,000 [READ: 1,000,000]
-Total errors              :          0 [READ: 0]
-Total GC count            : 0
-Total GC memory           : 0.000 KiB
-Total GC time             :    0.0 seconds
-Avg GC time               :    NaN ms
-StdDev GC time            :    0.0 ms
-Total operation time      : 00:00:21
+Op rate : 46,488 op/s [READ: 46,488 op/s]
+Partition rate : 46,488 pk/s [READ: 46,488 pk/s]
+Row rate : 46,488 row/s [READ: 46,488 row/s]
+Latency mean : 8.3 ms [READ: 8.3 ms]
+Latency median : 5.8 ms [READ: 5.8 ms]
+Latency 95th percentile : 14.7 ms [READ: 14.7 ms]
+Latency 99th percentile : 22.7 ms [READ: 22.7 ms]
+Latency 99.9th percentile : 704.6 ms [READ: 704.6 ms]
+Latency max : 2533.4 ms [READ: 2,533.4 ms]
+Total partitions : 1,000,000 [READ: 1,000,000]
+Total errors : 0 [READ: 0]
+Total GC count : 0
+Total GC memory : 0.000 KiB
+Total GC time : 0.0 seconds
+Avg GC time : NaN ms
+StdDev GC time : 0.0 ms
+Total operation time : 00:00:21
 
 Improvement over 304 threadCount: -24%
 ```

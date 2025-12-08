@@ -1,3 +1,4 @@
+#!/bin/bash
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   image_name="cse239-cloud-storage-scylla-1"

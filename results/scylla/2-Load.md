@@ -4,6 +4,8 @@
 docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 ```
 
+## Target Ops/Sec = 200
+
 ```
 [OVERALL], RunTime(ms), 52985
 [OVERALL], Throughput(ops/sec), 188.73266018684532
@@ -37,6 +39,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], 99thPercentileLatency(us), 1599
 [UPDATE], Return=OK, 4973
 ```
+
+## Target Ops/Sec = 500
 
 ```
 [OVERALL], RunTime(ms), 52954
@@ -72,6 +76,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], Return=OK, 12173
 ```
 
+## Target Ops/Sec = 1000
+
 ```
 [OVERALL], RunTime(ms), 52947
 [OVERALL], Throughput(ops/sec), 944.3405669820764
@@ -105,6 +111,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], 99thPercentileLatency(us), 1287
 [UPDATE], Return=OK, 24958
 ```
+
+## Target Ops/Sec = 2500
 
 ```
 [OVERALL], RunTime(ms), 52936
@@ -140,6 +148,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], Return=OK, 62161
 ```
 
+## Target Ops/Sec = 5000
+
 ```
 [OVERALL], RunTime(ms), 52948
 [OVERALL], Throughput(ops/sec), 4721.613658683992
@@ -174,6 +184,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], Return=OK, 124578
 ```
 
+## Target Ops/Sec = 10000
+
 ```
 [OVERALL], RunTime(ms), 52930
 [OVERALL], Throughput(ops/sec), 9446.438692612885
@@ -207,6 +219,8 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 [UPDATE], 99thPercentileLatency(us), 1301
 [UPDATE], Return=OK, 250142
 ```
+
+## Target Ops/Sec = 20000
 
 ```
 [OVERALL], RunTime(ms), 64518

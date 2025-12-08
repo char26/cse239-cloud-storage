@@ -4,6 +4,8 @@
 docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 ```
 
+## Target Ops/Sec = 200
+
 ```
 [OVERALL], RunTime(ms), 50098
 [OVERALL], Throughput(ops/sec), 199.6087668170386
@@ -37,6 +39,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], 99thPercentileLatency(us), 922
 [UPDATE], Return=OK, 4941
 ```
+
+## Target Ops/Sec = 500
 
 ```
 [OVERALL], RunTime(ms), 50096
@@ -72,6 +76,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], Return=OK, 12435
 ```
 
+## Target Ops/Sec = 1000
+
 ```
 [OVERALL], RunTime(ms), 50095
 [OVERALL], Throughput(ops/sec), 998.1036031540074
@@ -105,6 +111,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], 99thPercentileLatency(us), 716
 [UPDATE], Return=OK, 25102
 ```
+
+## Target Ops/Sec = 2500
 
 ```
 [OVERALL], RunTime(ms), 53384
@@ -140,6 +148,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], Return=OK, 62405
 ```
 
+## Target Ops/Sec = 5000
+
 ```
 [OVERALL], RunTime(ms), 108555
 [OVERALL], Throughput(ops/sec), 2302.980056192713
@@ -174,6 +184,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], Return=OK, 124902
 ```
 
+## Target Ops/Sec = 10000
+
 ```
 [OVERALL], RunTime(ms), 205564
 [OVERALL], Throughput(ops/sec), 2432.33250958339
@@ -207,6 +219,8 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], 99thPercentileLatency(us), 1113
 [UPDATE], Return=OK, 249292
 ```
+
+## Target Ops/Sec = 10000
 
 ```
 [OVERALL], RunTime(ms), 376510
