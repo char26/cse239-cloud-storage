@@ -141,3 +141,13 @@ resource "google_compute_instance" "benchmark_vm" {
 
   tags = ["benchmark-vm"]
 }
+
+output "scylla_vm_public_ip" {
+  description = "The public IP address of the Scylla VM"
+  value = google_compute_instance.scylla_vm.network_interface[0].access_config[0].nat_ip
+}
+
+output "postgres_vm_public_ip" {
+  description = "The public IP address of the Postgres VM"
+  value = google_compute_instance.postgres_vm.network_interface[0].access_config[0].nat_ip
+}
