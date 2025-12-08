@@ -220,7 +220,7 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 [UPDATE], Return=OK, 249292
 ```
 
-## Target Ops/Sec = 10000
+## Target Ops/Sec = 20000
 
 ```
 [OVERALL], RunTime(ms), 376510
