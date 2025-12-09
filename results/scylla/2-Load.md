@@ -257,3 +257,6 @@ docker run -it char26/ycsb ./run_load.sh scylla <ip_address> -t 8
 ```
 
 ![](../screenshots/ycsb_load_scylla.jpg)
+![](../../figures/load_throughput_scylla.png)
+![](../../figures/latency_scylla_2-Load_READ_vs_target.png.png)
+![](../../figures/latency_scylla_2-Load_UPDATE_vs_target.png)

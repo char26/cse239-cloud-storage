@@ -58,3 +58,5 @@ latency average = 5.114 ms
 tps = 1564.293927 (including connections establishing)
 tps = 1564.590478 (excluding connections establishing)
 ```
+
+![](../../figures/vert.jpg)

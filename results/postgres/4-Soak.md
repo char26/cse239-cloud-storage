@@ -39,3 +39,5 @@ docker run -it char26/ycsb ./run_soak.sh postgres <ip_address> -t 1
 ```
 
 ![](../screenshots/ycsb_soak_postgres.jpg)
+
+![](../../figures/soak_throughput_comparison.png)

@@ -147,3 +147,5 @@ Total operation time : 00:01:11
 ```
 
 ![](../screenshots/hori_3_cpu.jpg)
+
+![](../../figures/hori_scylla.jpg)

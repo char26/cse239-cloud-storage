@@ -120,3 +120,7 @@ Total operation time : 00:00:21
 
 Improvement over 304 threadCount: -24%
 ```
+
+![](../../figures/spike_throughput_scylla.jpg)
+![](../../figures/spike_latency_scylla.jpg)
+![](../../figures/spike_max_latency_scylla.jpg)

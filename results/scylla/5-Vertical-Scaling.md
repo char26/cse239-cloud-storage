@@ -140,3 +140,5 @@ Avg GC time : NaN ms
 StdDev GC time : 0.0 ms
 Total operation time : 00:00:53
 ```
+
+![](../../figures/vert.jpg)

@@ -101,6 +101,12 @@ docker compose up -d
 ./compose_init_scylla.sh
 ```
 
+Note: if you are on an ARM machine, you should pull the benchmarking image ahead of time with
+
+```sh
+docker pull char26/ycsb --platform=linux/amd64
+```
+
 Run YCSB workloada against local Scylla database
 
 ```sh

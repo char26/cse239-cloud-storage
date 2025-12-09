@@ -35,3 +35,5 @@ docker run -it char26/ycsb ./insert_postgres.sh <ip_address> -t 1
 ```
 
 ![](../screenshots/ycsb_insert_postgres.jpg)
+
+Postgres appears stuck at only 25% CPU utilization. This is likely due to the concurrency issue we ran into with YCSB, where it does not open multiple connections.

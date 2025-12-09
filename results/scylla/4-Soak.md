@@ -39,3 +39,4 @@ docker run -it char26/ycsb ./run_soak.sh scylla <ip_address> -t 8
 ```
 
 ![](../screenshots/ycsb_soak_scylla.jpg)
+![](../../figures/soak_throughput_comparison.png)
