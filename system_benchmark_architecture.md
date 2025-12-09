@@ -1,3 +1,9 @@
+# System Architecture
+
+We define three VMs in a Terraform configuration file. One VM for Postgres, Scylla, and an additional VM to run the benchmarks from. All of which are hosted at the same location. Postgres and Scylla both get dedicated 375GB local NVME SSDs.
+
+We also include a Docker Compose file, made to make local testing and peer deployment easier. This may also double as a quick way to test on a Nautilus VM, or any other compute cluster.
+
 # Benchmarking Methods
 
 ## VM Setup
@@ -43,14 +49,28 @@ Unfortunate limitation: Postgres deadlocks will multiple YCSB threads, so we are
 
 For Scylla, use 25 threads.
 
-### Compare VM Sizes (Cost comparison)
+### Spike
 
-Run database specific benchmarking (`pgbench` and `cassandra-stress`) against multiple sizes of VMs to compare cost to performance.
+Simulate small to large load sizes.
 
-#### Vertical Scaling
+Postgres: custom pgbench script with 8 -> 75 -> 8 -> 100 client connections, each sending 1000 transactions.
+
+Scylla: cassandra-stress 4 -> 104 -> 204 -> 304 -> 404 threads
+
+### Vertical Scaling
 
 For both Postgres and Scylla: run against `n2d-standard-2`, `n2d-standard-4`, and `n2d-standard-8`. These VMs have (2 vCPUs, 8GB RAM), (4 vCPUs, 16GB RAM), and (8 vCPUs, 32GB RAM) respectively.
 
-#### Horizontal Scaling
+Postgres: pgbench with 8 client connections, 5000 transactions per client
+
+Scylla: cassandra-stress with 1,000,000 writes, followed by 1,000,000 reads
+
+### Horizontal Scaling
 
 Create a cluster of Scylla nodes and observe read and write performance for 1, 2, and 3 total nodes.
+
+### ScyllaDB Cloud
+
+To supplement our lacking dashboards, provision a trial Scylla cluster of 3 nodes, all with 2 vCPUs and 16GB RAM.
+
+Run default cassandra-stress benchmark with the increasing thread count (4 -> 104 -> 204 -> 304 -> 404) and specifically observe caching behavior from the integrated Grafana dashboard.

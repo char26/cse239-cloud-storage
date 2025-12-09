@@ -1,5 +1,7 @@
 # cse239-cloud-storage
 
+[View the system and benchmarking architecture here.](system_benchmark_architecture.md)
+
 Note: If you are another group looking to deploy our project head to the [Nautilus/local instructions below](#peer-deployment).
 
 ## Installation Prerequisites
