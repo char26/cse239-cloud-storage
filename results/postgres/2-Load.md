@@ -259,4 +259,9 @@ docker run -it char26/ycsb ./run_load.sh postgres <ip_address> -t 1
 ![](../screenshots/ycsb_load_postgres.jpg)
 
 Postgres doesn't seem to be doing much caching?
+
 ![](../screenshots/ycsb_load_postgres_top.jpg)
+
+![](../../figures/latency_postgres_2-Load_READ_vs_target.png)
+
+![](../../figures/latency_postgres_2-Load_UPDATE_vs_target.png.png)
